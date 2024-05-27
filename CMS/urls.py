@@ -16,12 +16,11 @@ Including another URLconf
 """
 
 
+# CMS/urls.py (or your project's main urls.py)
 from django.contrib import admin
-from django.urls import path,include
-from ninja import NinjaAPI
-
+from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-     path('', include('core.urls')),
+    path('', include('core.urls')),  # Include the URLs from the core app
 ]

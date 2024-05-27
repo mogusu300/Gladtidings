@@ -1,9 +1,6 @@
 from django.urls import path
-from ninja import NinjaAPI
-from .api import router
-
-api = NinjaAPI()
+from .api import api  # Import the API instance
 
 urlpatterns = [
-    path('', router.urls),  # Include the URLs defined in your app's API router
+    path("api/", api.urls),  # Include the URLs defined by the API instance
 ]
