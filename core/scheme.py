@@ -1,17 +1,7 @@
-from pydantic import BaseModel, EmailStr
-from typing import List 
+from ninja import Schema
 
-class UserCreateSchema(BaseModel):
-  username: str
-  email: EmailStr
-  password: str
-  role: str
-
-class UserSchema(BaseModel):
-  id: int
-  username: str
-  email: str
-  role: str
-
-  class Config:
-    orm_mode: True
+class TopicSchema(Schema):
+    id: int
+    title: str
+    content: str
+    course_id: int
