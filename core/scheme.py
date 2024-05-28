@@ -1,11 +1,13 @@
 from pydantic import BaseModel, EmailStr
 from typing import List 
+from ninja import Schema, ModelSchema
+from core.models import Enrollment
 
-class UserCreateSchema(BaseModel):
-  username: str
-  email: EmailStr
-  password: str
-  role: str
+
+class EnrollmentSchema(ModelSchema):
+    class Config:
+        model = Enrollment
+        include = ["id", "user", "course", "issued_at"]
 
 class UserSchema(BaseModel):
   id: int
