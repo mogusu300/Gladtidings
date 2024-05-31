@@ -1,19 +1,27 @@
 from pydantic import BaseModel, EmailStr
 from typing import List 
+from typing import Optional
 from ninja import Schema, ModelSchema
-from core.models import Enrollment
+from .models import Enrollment  # Ensure the correct model is imported
+class UserCreateSchema(Schema):
+    username: str
+    email: EmailStr
+    password: str
+    role: str  # Adjust based on your role field in the user model
+
+class UserSchema(Schema):
+    id: int
+    username: str
+    email: EmailStr
+    role: str  # Adjust based on your role field in the user model
 
 
 class EnrollmentSchema(ModelSchema):
     class Config:
-        model = Enrollment
-        include = ["id", "user", "course", "issued_at"]
+        model = Enrollment  # Ensure the model is correctly referenced
+        model_fields = '__all__'  # Customize fields as needed
 
-class UserSchema(BaseModel):
-  id: int
-  username: str
-  email: str
-  role: str
 
-  class Config:
-    orm_mode: True
+
+
+
