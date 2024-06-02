@@ -2,6 +2,8 @@ from pydantic import BaseModel, EmailStr
 from typing import List 
 from ninja import Schema, ModelSchema
 from core.models import Enrollment
+from rest_framework import serializers
+from .models import Certificate
 
 
 class EnrollmentSchema(ModelSchema):
@@ -17,3 +19,10 @@ class UserSchema(BaseModel):
 
   class Config:
     orm_mode: True
+
+
+class CertificateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Certificate
+        fields = ['id', 'user', 'course', 'issued_at']
+        depth = 1  # To include related course and user details
