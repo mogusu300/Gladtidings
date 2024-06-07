@@ -55,7 +55,7 @@ ROOT_URLCONF = 'CMS.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -124,3 +124,12 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'core.CustomUser'
+
+import os
+from pathlib import Path
+
+# Get the base directory of the project
+# __file__ is the path of the current file
+# resolve() makes the path absolute
+# parent.parent moves up two levels in the directory tree
+BASE_DIR = Path(__file__).resolve().parent.parent

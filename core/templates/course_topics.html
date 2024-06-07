@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Topics</title>
+</head>
+<body>
+    <h1>Course Topics</h1>
+    <ul id="topics-list"></ul>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const courseId = "{{ course_id }}";
+            const topicsList = document.getElementById("topics-list");
+
+            fetch(`/api/courses/${courseId}/topics`)
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(topic => {
+                        const li = document.createElement("li");
+                        li.textContent = `${topic.title}: ${topic.content}`;
+                        topicsList.appendChild(li);
+                    });
+                })
+                .catch(error => console.error('Error fetching topics:', error));
+        });
+    </script>
+</body>
+</html>
