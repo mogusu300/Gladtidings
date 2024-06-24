@@ -32,6 +32,42 @@ class CustomUserAdmin(BaseUserAdmin):
     search_fields = ('username', 'first_name', 'last_name', 'email', 'role')  
     # Default ordering of the user list
     ordering = ('username',)
+# courses/admin.py
+
+
 
 # Register the CustomUserAdmin
 admin.site.register(CustomUser, CustomUserAdmin)
+# courses/admin.py
+
+
+# core/admin.py
+
+from django.contrib import admin
+from .models import Course, Topic, Enrollment, Certificate
+
+@admin.register(Course)
+class CourseAdmin(admin.ModelAdmin):
+    list_display = ('title', 'description')  # 'created_at' removed
+    search_fields = ('title', 'description')
+
+@admin.register(Topic)
+class TopicAdmin(admin.ModelAdmin):
+    list_display = ('title', 'course')  # 'created_at' removed
+    search_fields = ('title', 'course__title')
+    list_filter = ('course',)
+
+@admin.register(Enrollment)
+class EnrollmentAdmin(admin.ModelAdmin):
+    list_display = ('user', 'course')  # 'enrolled_at' removed
+    search_fields = ('user__username', 'course__title')
+    list_filter = ('course',)
+
+@admin.register(Certificate)
+class CertificateAdmin(admin.ModelAdmin):
+    list_display = ('user', 'course', 'issued_at')
+    search_fields = ('user__username', 'course__title')
+    list_filter = ('course',)
+
+
+
