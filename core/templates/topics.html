@@ -1,0 +1,11 @@
+<!-- templates/topics.html -->
+{% extends 'base.html' %}
+{% block title %}Topics{% endblock %}
+{% block content %}
+<h2>Topics</h2>
+<ul>
+  {% for topic in topics %}
+  <li>{{ topic.title }}</li>
+  {% endfor %}
+</ul>
+{% endblock %}

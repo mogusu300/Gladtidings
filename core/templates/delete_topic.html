@@ -1,0 +1,11 @@
+<!-- templates/delete_topic.html -->
+{% extends 'base.html' %}
+{% block title %}Delete Topic{% endblock %}
+{% block content %}
+<h2>Delete Topic</h2>
+<p>Are you sure you want to delete the topic "{{ topic.title }}"?</p>
+<form method="post">
+  {% csrf_token %}
+  <button type="submit">Delete</button>
+</form>
+{% endblock %}

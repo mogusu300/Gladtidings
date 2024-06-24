@@ -1,0 +1,11 @@
+<!-- templates/update_topic.html -->
+{% extends 'base.html' %}
+{% block title %}Update Topic{% endblock %}
+{% block content %}
+<h2>Update Topic</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Update Topic</button>
+</form>
+{% endblock %}
