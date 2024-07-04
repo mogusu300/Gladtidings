@@ -1,73 +1,105 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from django.utils.translation import gettext_lazy as _
+from django import forms
+from django.db import transaction, IntegrityError
+import logging
 
-from .models import CustomUser
+from .models import Institution, Course, Topic, Enrollment, Certificate, CustomUser
 
-class CustomUserAdmin(BaseUserAdmin):
-    # The fields to be used in displaying the User model.
-    # These override the definitions on the base UserAdmin
-    # that reference specific fields on auth.User.
-    fieldsets = (
-        (None, {'fields': ('username', 'password')}),
-        (_('Personal info'), {'fields': ('first_name', 'last_name', 'email')}),
-        (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser',
-                                       'groups', 'user_permissions')}),
-        (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
-        (_('Additional info'), {'fields': ('role',)}),  # Custom field for role
-    )
-    add_fieldsets = (
-        (None, {
-            'classes': ('wide',),
-            'fields': ('username', 'password1', 'password2'),
-        }),
-        (_('Personal info'), {'fields': ('first_name', 'last_name', 'email')}),
-        (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser',
-                                       'groups', 'user_permissions')}),
-        (_('Additional info'), {'fields': ('role',)}),  # Custom field for role
-    )
-    # Fields to display in the user list view
-    list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff', 'role')  
-    # Fields to enable search functionality in the admin
-    search_fields = ('username', 'first_name', 'last_name', 'email', 'role')  
-    # Default ordering of the user list
-    ordering = ('username',)
-# courses/admin.py
+logger = logging.getLogger(__name__)
 
+class InstitutionForm(forms.ModelForm):
+    class Meta:
+        model = Institution
+        fields = '__all__'
 
-
-# Register the CustomUserAdmin
-admin.site.register(CustomUser, CustomUserAdmin)
-# courses/admin.py
-
-
-# core/admin.py
-
-from django.contrib import admin
-from .models import Course, Topic, Enrollment, Certificate
-
-@admin.register(Course)
+class InstitutionAdmin(admin.ModelAdmin):
+    form = InstitutionForm
+    list_display = ('name', 'description')
+    search_fields = ('name',)
+    
+    def save_model(self, request, obj, form, change):
+        try:
+            with transaction.atomic():
+                logger.debug(f"Saving Institution: {obj}")
+                super().save_model(request, obj, form, change)
+        except IntegrityError as e:
+            logger.error(f"IntegrityError while saving institution: {e}")
+            logger.debug(f"Request data: {request.POST}")
+            logger.debug(f"Form errors: {form.errors}")
+            raise e
+        
+admin.site.register(Institution, InstitutionAdmin)
+# Registering other models similarly with enhanced logging
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ('title', 'description')  # 'created_at' removed
-    search_fields = ('title', 'description')
+    list_display = ('title', 'description', 'institution', 'public')
+    search_fields = ('title', 'institution__name')
 
-@admin.register(Topic)
+    def save_model(self, request, obj, form, change):
+        try:
+            with transaction.atomic():
+                super().save_model(request, obj, form, change)
+        except IntegrityError as e:
+            logger.error(f"IntegrityError while saving course: {e}")
+            logger.debug(f"Request data: {request.POST}")
+            logger.debug(f"Form errors: {form.errors}")
+            raise e
+
+admin.site.register(Course, CourseAdmin)
+
 class TopicAdmin(admin.ModelAdmin):
-    list_display = ('title', 'course')  # 'created_at' removed
+    list_display = ('title', 'course')
     search_fields = ('title', 'course__title')
-    list_filter = ('course',)
 
-@admin.register(Enrollment)
+    def save_model(self, request, obj, form, change):
+        try:
+            with transaction.atomic():
+                super().save_model(request, obj, form, change)
+        except IntegrityError as e:
+            logger.error(f"IntegrityError while saving topic: {e}")
+            logger.debug(f"Request data: {request.POST}")
+            logger.debug(f"Form errors: {form.errors}")
+            raise e
+
+admin.site.register(Topic, TopicAdmin)
+
 class EnrollmentAdmin(admin.ModelAdmin):
-    list_display = ('user', 'course')  # 'enrolled_at' removed
+    list_display = ('user', 'course')
     search_fields = ('user__username', 'course__title')
-    list_filter = ('course',)
 
-@admin.register(Certificate)
+    def save_model(self, request, obj, form, change):
+        try:
+            with transaction.atomic():
+                super().save_model(request, obj, form, change)
+        except IntegrityError as e:
+            logger.error(f"IntegrityError while saving enrollment: {e}")
+            logger.debug(f"Request data: {request.POST}")
+            logger.debug(f"Form errors: {form.errors}")
+            raise e
+
+admin.site.register(Enrollment, EnrollmentAdmin)
+
 class CertificateAdmin(admin.ModelAdmin):
     list_display = ('user', 'course', 'issued_at')
     search_fields = ('user__username', 'course__title')
-    list_filter = ('course',)
 
+    def save_model(self, request, obj, form, change):
+        try:
+            with transaction.atomic():
+                super().save_model(request, obj, form, change)
+        except IntegrityError as e:
+            logger.error(f"IntegrityError while saving certificate: {e}")
+            logger.debug(f"Request data: {request.POST}")
+            logger.debug(f"Form errors: {form.errors}")
+            raise e
 
+admin.site.register(Certificate, CertificateAdmin)
 
+from django.contrib.auth.admin import UserAdmin
+from .models import CustomUser
+
+class CustomUserAdmin(UserAdmin):
+    fieldsets = UserAdmin.fieldsets + (
+        (None, {'fields': ('age', 'role')}),
+    )
+
+admin.site.register(CustomUser, CustomUserAdmin)

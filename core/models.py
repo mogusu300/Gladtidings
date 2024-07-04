@@ -1,7 +1,7 @@
-from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.core.exceptions import ValidationError
 
 class CustomUser(AbstractUser):
     username = models.CharField(max_length=150, unique=True)
@@ -25,7 +25,15 @@ class Course(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     public = models.BooleanField(default=True)
-    institution = models.ForeignKey(Institution, on_delete=models.CASCADE, null=True, blank=True)
+    institution = models.ForeignKey(Institution, on_delete=models.CASCADE, null=True, blank=True, db_constraint=False)
+
+    def clean(self):
+        if self.institution and not Institution.objects.filter(id=self.institution_id).exists():
+            raise ValidationError(f"Institution with id {self.institution_id} does not exist.")
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        super().save(*args, **kwargs)
 
 class Topic(models.Model):
     course = models.ForeignKey(Course, related_name='topics', on_delete=models.CASCADE)
