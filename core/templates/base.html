@@ -10,6 +10,8 @@
             font-family: Arial, sans-serif;
             background-color: #f0f8ff; /* Light blue background */
             color: #333;
+            margin: 0;
+            padding: 0;
         }
         .container {
             width: 80%;
@@ -19,12 +21,40 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        header, footer {
+        header {
+            background-color: #007acc; /* Dark blue for header */
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        header h1 {
+            margin: 0;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+        nav ul li {
+            margin-left: 20px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+        footer {
             text-align: center;
             padding: 10px;
-            background-color: #e0f7fa; /* Lighter blue for header/footer */
+            background-color: #e0f7fa; /* Lighter blue for footer */
             border-radius: 10px;
-            margin-bottom: 20px;
+            margin-top: 20px;
         }
         h2 {
             color: #007acc; /* Darker blue for headings */
@@ -61,12 +91,14 @@
     <header>
         <h1>My Site</h1>
         <nav>
-            <a href="{% url 'register' %}">Register</a> |
-            <a href="{% url 'login' %}">Login</a> |
-            <a href="{% url 'list_courses' %}">Courses</a> |
-            <a href="{% url 'my_courses' %}">My Courses</a> |
-            <a href="{% url 'certificates' %}">Certificates</a> |
-            <a href="{% url 'change_password' %}">Change Password</a>
+            <ul>
+                <li><a href="{% url 'register' %}">Register</a></li>
+                <li><a href="{% url 'login' %}">Login</a></li>
+                <li><a href="{% url 'home' %}">Courses</a></li>
+                <li><a href="{% url 'my_courses' %}">My Courses</a></li>
+                <li><a href="{% url 'certificates' %}">Certificates</a></li>
+                <li><a href="{% url 'change_password' %}">Change Password</a></li>
+            </ul>
         </nav>
     </header>
     <div class="container">

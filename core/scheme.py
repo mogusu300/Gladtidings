@@ -1,72 +1,66 @@
-from pydantic import BaseModel, EmailStr, Field
-from typing import Optional, List
+from pydantic import BaseModel
+from typing import List, Optional
 
-# User Create Schema
 class UserCreateSchema(BaseModel):
-    username: str = Field(..., description="The user's username")
-    email: EmailStr = Field(..., description="The user's email address")
-    password: str = Field(..., description="The user's password")
-    role: str = Field(..., description="The user's role")
-
-# User Schema
-class UserSchema(BaseModel):
-    id: int
     username: str
-    email: EmailStr
+    email: str
+    password: str
     role: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
-# Login Schema
+class UserSchema(BaseModel):
+    id: int
+    username: str
+    email: str
+    role: str
+
+    class Config:
+        from_attributes = True
+
 class LoginSchema(BaseModel):
     username: str
     password: str
 
-# Change Password Schema
 class ChangePasswordSchema(BaseModel):
     old_password: str
     new_password: str
 
-# Course Schema
 class CourseSchema(BaseModel):
-    id: Optional[int] = None
+    id: int
     title: str
     description: str
     public: bool
-    creator_id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
-# Topic Schema
 class TopicSchema(BaseModel):
-    id: Optional[int] = None
-    course_id: int
+    id: int
     title: str
     content: str
+    course_id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
-# Enrollment Schema
 class EnrollmentSchema(BaseModel):
-    id: Optional[int] = None
     user_id: int
     course_id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
-# Certificate Schema
 class CertificateSchema(BaseModel):
-    id: Optional[int] = None
+    id: int
     user_id: int
     course_id: int
-    issue_date: str
+    issued_at: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
+
 
 
 

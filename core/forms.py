@@ -6,7 +6,7 @@ from .models import CustomUser, Course, Topic, Enrollment, Certificate
 class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = CustomUser
-        fields = ['username', 'email', 'password1', 'password2', 'role']
+        fields = ['username', 'email', 'password1', 'password2']
 
 class CourseForm(forms.ModelForm):
     class Meta:
