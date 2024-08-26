@@ -6,6 +6,7 @@
 <p>Are you sure you want to delete the topic "{{ topic.title }}"?</p>
 <form method="post">
   {% csrf_token %}
-  <button type="submit">Delete</button>
+  <button type="submit">Confirm Delete</button>
+  <a href="{% url 'list_topics' course.id %}">Cancel</a>
 </form>
 {% endblock %}

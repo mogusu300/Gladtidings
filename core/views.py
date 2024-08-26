@@ -23,7 +23,7 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('my_courses')
+            return redirect('home')
         else:
             messages.error(request, 'Invalid username or password.')
     return render(request, 'login.html')
@@ -98,12 +98,61 @@ def get_topic(request, topic_id):
     topic = get_object_or_404(Topic, id=topic_id)
     return render(request, 'topic.html', {'topic': topic})
 
+from django.core.exceptions import PermissionDenied
+
+@login_required
+def list_courses(request):
+    if request.user.is_staff:
+        courses = Course.objects.filter(institution=request.user.institution)
+    else:
+        courses = Course.objects.filter(public=True)
+    return render(request, 'courses.html', {'courses': courses})
+
+@login_required
+def create_course(request):
+    if not request.user.is_staff or not request.user.institution:
+        raise PermissionDenied("You do not have permission to create courses.")
+    if request.method == 'POST':
+        form = CourseForm(request.POST)
+        if form.is_valid():
+            course = form.save(commit=False)
+            course.institution = request.user.institution  # Assign the course to the user's institution
+            course.creator = request.user
+            course.save()
+            return redirect('list_courses')
+    else:
+        form = CourseForm()
+    return render(request, 'create_course.html', {'form': form})
+
+@login_required
+def update_course(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+    if not request.user.is_staff or course.institution != request.user.institution:
+        raise PermissionDenied("You do not have permission to update this course.")
+    if request.method == 'POST':
+        form = CourseForm(request.POST, instance=course)
+        if form.is_valid():
+            form.save()
+            return redirect('list_courses')
+    else:
+        form = CourseForm(instance=course)
+    return render(request, 'update_course.html', {'form': form})
+
+@login_required
+def delete_course(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+    if not request.user.is_staff or course.institution != request.user.institution:
+        raise PermissionDenied("You do not have permission to delete this course.")
+    if request.method == 'POST':
+        course.delete()
+        return redirect('list_courses')
+    return render(request, 'delete_course.html', {'course': course})
+
 @login_required
 def create_topic(request, course_id):
     course = get_object_or_404(Course, id=course_id)
-    if request.user.role != 'admin' or course.creator != request.user:
-        messages.error(request, 'Only the course creator can add topics.')
-        return redirect('list_courses')
+    if not request.user.is_staff or course.institution != request.user.institution:
+        raise PermissionDenied("You do not have permission to add topics to this course.")
     if request.method == 'POST':
         form = TopicForm(request.POST)
         if form.is_valid():
@@ -118,9 +167,8 @@ def create_topic(request, course_id):
 @login_required
 def update_topic(request, topic_id):
     topic = get_object_or_404(Topic, id=topic_id)
-    if request.user.role != 'admin' or topic.course.creator != request.user:
-        messages.error(request, 'Only the course creator can update topics.')
-        return redirect('list_courses')
+    if not request.user.is_staff or topic.course.institution != request.user.institution:
+        raise PermissionDenied("You do not have permission to update this topic.")
     if request.method == 'POST':
         form = TopicForm(request.POST, instance=topic)
         if form.is_valid():
@@ -133,10 +181,18 @@ def update_topic(request, topic_id):
 @login_required
 def delete_topic(request, topic_id):
     topic = get_object_or_404(Topic, id=topic_id)
-    if request.user.role != 'admin' or topic.course.creator != request.user:
-        messages.error(request, 'Only the course creator can delete topics.')
-        return redirect('list_courses')
+    if not request.user.is_staff or topic.course.institution != request.user.institution:
+        raise PermissionDenied("You do not have permission to delete this topic.")
     if request.method == 'POST':
         topic.delete()
         return redirect('list_topics', course_id=topic.course.id)
     return render(request, 'delete_topic.html', {'topic': topic})
+
+def home(request):
+    return render(request, 'home.html')
+
+def about(request):
+    return render(request, 'about.html')
+
+def teachers(request):
+    return render(request, 'teachers.html')

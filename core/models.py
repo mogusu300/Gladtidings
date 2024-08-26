@@ -3,6 +3,17 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.core.exceptions import ValidationError
 
+
+
+
+from django.db import models
+from django.core.exceptions import ValidationError
+
+class Institution(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+    image = models.ImageField(upload_to='institutions/', null=True, blank=True)  # Add image field
+
 class CustomUser(AbstractUser):
     username = models.CharField(max_length=150, unique=True)
     first_name = models.CharField(max_length=30, blank=True)
@@ -12,20 +23,19 @@ class CustomUser(AbstractUser):
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(auto_now_add=True)
     age = models.PositiveIntegerField(blank=True, null=True)
-    role = models.CharField(max_length=100, blank=True)  # Assuming 'role' is a user role field
-    
+    role = models.CharField(max_length=100, blank=True)
+    institution = models.ForeignKey(Institution, on_delete=models.SET_NULL, null=True, blank=True)  # Link to institution
+
     def __str__(self):
-        return self.username  # Display username as strin
-
-class Institution(models.Model):
-    name = models.CharField(max_length=255)
-    description = models.TextField()
-
+        return self.username
+    
+    
 class Course(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     public = models.BooleanField(default=True)
     institution = models.ForeignKey(Institution, on_delete=models.CASCADE, null=True, blank=True, db_constraint=False)
+    image = models.ImageField(upload_to='courses/', null=True, blank=True)  # Add image field
 
     def clean(self):
         if self.institution and not Institution.objects.filter(id=self.institution_id).exists():
@@ -39,6 +49,8 @@ class Topic(models.Model):
     course = models.ForeignKey(Course, related_name='topics', on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     content = models.TextField()
+    image = models.ImageField(upload_to='topics/', null=True, blank=True)  # Add image field
+
 
 class Enrollment(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)

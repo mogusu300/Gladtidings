@@ -5,7 +5,10 @@
 <h2>Courses</h2>
 <ul>
   {% for course in courses %}
-  <li>{{ course.title }}</li>
+  <li>
+    <a href="{% url 'list_topics' course.id %}">{{ course.title }}</a>
+  </li>
   {% endfor %}
 </ul>
 {% endblock %}
+ 
