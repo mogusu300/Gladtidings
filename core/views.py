@@ -14,7 +14,7 @@ def register(request):
             return redirect('login')
     else:
         form = CustomUserCreationForm()
-    return render(request, 'register.html', {'form': form})
+    return render(request, 'login.html', {'form': form})
 
 def login_view(request):
     if request.method == 'POST':
@@ -56,7 +56,6 @@ def my_certificates(request):
     certificates = Certificate.objects.filter(user=request.user)
     return render(request, 'certificates.html', {'certificates': certificates})
 
-@login_required
 def change_password(request):
     if request.method == 'POST':
         old_password = request.POST['old_password']
