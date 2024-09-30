@@ -28,7 +28,6 @@ def login_view(request):
             messages.error(request, 'Invalid username or password.')
     return render(request, 'login.html')
 
-@login_required
 def list_courses(request):
     courses = Course.objects.filter(public=True)
     return render(request, 'courses.html', {'courses': courses})
