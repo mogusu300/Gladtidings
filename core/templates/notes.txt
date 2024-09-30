@@ -1,4 +1,4 @@
-Old code for base.html
+Old code snippets
 
 <!-- <body>
     <header>
@@ -21,3 +21,22 @@ Old code for base.html
 </body> -->
 
 {% static 'img/' %}
+
+<ul>
+  {% for course in courses %}
+  <li>{{ course.title }}</li>
+  {% endfor %}
+</ul>
+
+
+--------------------------------------------------
+
+Pages to integrate:
+Home ✅
+Courses ✅
+My Courses 
+login
+register
+certificates
+
+
