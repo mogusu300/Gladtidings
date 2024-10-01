@@ -24,7 +24,7 @@
           >
               Enroll
           </h5>
-          <h1>Enroll yoursel into a course</h1>
+          <h1>Enroll yourself into a course</h1>
           </div>
           <div class="contact-form bg-secondary rounded p-5">
             <div id="success"></div>
@@ -35,7 +35,7 @@
                   <p class="form__link" style="color: rgb(105, 113, 121);">Select your course from the dropdown  menu below</p>                          
                   
                   </div>
-                  <select class="form-control border-0 p-4" id="course" name="course" required="required" data-validation-required-message="Please select a course">
+                  <select class="dropdown form-control border-0 p-4 " id="course" name="course" required="required" data-validation-required-message="Please select a course">
                       <option value="" disabled selected >Course Name</option>  <!-- Default placeholder option -->
                       {% for course in form.course.field.queryset %}
                           <option value="{{ course.title }}">{{ course.name }}</option>

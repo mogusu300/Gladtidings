@@ -1,12 +1,62 @@
 <!-- templates/certificates.html -->
-{% load compress %} {% load static %}
 {% extends 'base.html' %}
+{% load compress %} {% load static %}
 {% block title %}My Certificates{% endblock %}
+
+
 {% block content %}
-<h2>My Certificates</h2>
-<ul>
-  {% for certificate in certificates %}
-  <li>{{ certificate.course.title }}</li>
-  {% endfor %}
-</ul>
+
+<!-- *Header Start -->
+<div class="container-fluid page-header" style="margin-bottom: 90px">
+  <div class="container">
+    <div
+      class="d-flex flex-column justify-content-center"
+      style="min-height: 300px"
+    >
+      <h3 class="display-4 text-white text-uppercase">Certificates</h3>
+      <div class="d-inline-flex text-white">
+        <p class="m-0 text-uppercase">
+          <a class="text-white" href="#">Home</a>
+        </p>
+        <i class="fa fa-angle-double-right pt-1 px-3"></i>
+        <p class="m-0 text-uppercase">Certificates</p>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Header End -->
+
+<!-- *Certificates Start -->
+<div class="container-fluid py-5">
+  <div class="container pt-5 pb-3">
+  <div class="text-center mb-5">
+      <h5
+      class="text-primary text-uppercase mb-3"
+      style="letter-spacing: 5px"
+      >
+      Certificates
+      </h5>
+      <h1>All my Certificates</h1>
+  </div>
+  <div class="row">
+      <!-- *for loop displaying certificates-->
+      {% for certificate in certificates %}
+      <div class="col-lg-3 col-md-6 mb-4">
+        <div
+            class="cat-item position-relative overflow-hidden rounded mb-2"
+        >
+            <img class="img-fluid" src="img/cat-9.jpg" alt="" />
+            <a class="cat-overlay text-white text-decoration-none" href="">
+            <h4 class="text-white font-weight-medium">{{ certificate.course.title }}</h4>
+            <span>{{ certificate.issued_at }}</span>
+            </a>
+        </div>
+      </div>
+      {% endfor %}
+  </div>
+  </div>
+</div>
+<!-- Certificates End -->
+
 {% endblock %}
+
