@@ -1,12 +1,114 @@
 <!-- templates/register.html -->
-{% extends 'base.html' %}
+
 {% load compress %} {% load static %}
-{% block title %}Register{% endblock %}
-{% block content %}
-<h2>Register</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Register</button>
-</form>
-{% endblock %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>ECourses</title>
+        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+        <meta content="Free HTML Templates" name="keywords" />
+        <meta content="Free HTML Templates" name="description" />
+
+        <!-- Favicon -->
+        <link href="{% static 'img/favicon.ico' %}" rel="icon" />
+
+        <!-- Google Web Fonts -->
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+        />
+
+        <!-- Font Awesome -->
+        <link
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css"
+        rel="stylesheet"
+        />
+
+        <!-- Libraries Stylesheet -->
+        <link
+        href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css' %}"
+        rel="stylesheet"
+        />
+
+        <!-- Customized Bootstrap Stylesheet -->
+        <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+    </head>
+
+    <body>
+        <!-- Sign up Start-->
+        <div class="container-fluid py-5">
+            <div class="container py-5">
+                <div class="text-center mb-5">
+                    <h5
+                    class="text-primary text-uppercase mb-3"
+                    style="letter-spacing: 5px"
+                    >
+                    Sign UP
+                    </h5>
+                    <h1>Create an account</h1>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                    <div class="contact-form bg-secondary rounded p-5">
+                        <div id="success"></div>
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="control-group">
+                                <input class="form-control border-0 p-4" id="name" type="text" name="username" placeholder="Username" required="required" data-validation-required-message="Please enter a username" />
+                                <p class="help-block text-danger"></p>
+                            </div>
+                            <div class="control-group">
+                                <input class="form-control border-0 p-4" id="email" type="text" name="email" placeholder="Email" required="required" data-validation-required-message="Please enter your email" />
+                                <p class="help-block text-danger"></p>
+                            </div>
+                            <div class="control-group">
+                                <input class="form-control border-0 p-4" id="password1" type="password" name="password1" placeholder="Password" required="required" data-validation-required-message="Please enter a password" />
+                                <p class="help-block text-danger"></p>
+                            </div>
+                            <div class="control-group">
+                                <input class="form-control border-0 p-4" id="password2" type="password" name="password2" placeholder="Confirm Password" required="required" data-validation-required-message="Please renter your password" />
+                                <p class="help-block text-danger"></p>
+                            </div>
+                            <div class="control-group">
+                                <input class="form-control border-0 p-4" id="email" type="text" name="role" placeholder="Role (Student / Institution)" required="required" data-validation-required-message="Please enter your role" />
+                                <p class="help-block text-danger"></p>
+                            </div>
+                            <div class="control-group">
+                                <a href="{% url 'login' %}" class="form__link">Already have an account?</a>                             
+                                <p class="help-block text-danger"></p>
+                            </div>
+                            
+                            <div class="text-center">
+                                <button
+                                class="btn btn-primary py-3 px-5"
+                                type="submit"
+                                id="sendMessageButton"
+                                >
+                                Sign Up
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Signup End -->
+
+        <!-- JavaScript Libraries -->
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+        <script src="{% static 'lib/easing/easing.min.js' %}"></script>
+        <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
+
+        <!-- Contact Javascript File -->
+        <script src="{% static 'mail/jqBootstrapValidation.min.js' %}"></script>
+        <script src="{% static 'mail/contact.js' %}"></script>
+
+        <!-- Template Javascript -->
+        <script src="{% static 'js/main.js' %}"></script>
+    </body>
+</html>

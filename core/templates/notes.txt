@@ -1,4 +1,4 @@
-Old code for base.html
+Old code snippets
 
 <!-- <body>
     <header>
@@ -21,3 +21,43 @@ Old code for base.html
 </body> -->
 
 {% static 'img/' %}
+
+<ul>
+  {% for course in courses %}
+  <li>{{ course.title }}</li>
+  {% endfor %}
+</ul>
+
+
+
+
+<!-- *Login form  -->
+<div class="container b-container" id="b-container">
+  <form class="form" id="b-form" method="post">
+    {% csrf_token %}
+    <h2 class="form_title title">Login to ECourse</h2>
+    <input class="form__input" type="text" name="username" placeholder="username"/>
+    <input class="form__input" type="password" name="password" placeholder="Password">
+    <a href="{% url 'change_password' %}" class="form__link">Forgot your password?</a>
+    <button class="form__button button submit" type="submit">Login</button>
+  </form>
+</div>
+
+enroll form
+<h2>Enroll in a Course</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Enroll</button>
+</form>
+
+--------------------------------------------------
+
+Pages to integrate:
+Home ✅
+Courses ✅
+My Courses 
+login & register ✅ (fix button issue)
+certificates
+base.html ✅
+

@@ -1,12 +1,56 @@
 <!-- templates/enroll.html -->
-{% load compress %} {% load static %}
 {% extends 'base.html' %}
+{% load compress %} {% load static %}
 {% block title %}Enroll{% endblock %}
 {% block content %}
-<h2>Enroll in a Course</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Enroll</button>
-</form>
+
+<!-- *Enroll Start -->
+<div class="container-fluid py-5">
+  <div class="container py-5">
+      <div class="row align-items-center">
+      <div class="col-lg-5">
+          <img
+          class="img-fluid rounded mb-4 mb-lg-0"
+          src="{% static 'img/about.jpg' %}"
+          alt=""
+          />
+          
+      </div>
+      <div class="col-lg-7">
+          <div class="text-left mb-4">
+          <h5
+              class="text-primary text-uppercase mb-3"
+              style="letter-spacing: 5px"
+          >
+              Enroll
+          </h5>
+          <h1>Enroll yoursel into a course</h1>
+          </div>
+          <div class="contact-form bg-secondary rounded p-5">
+            <div id="success"></div>
+            <form method="post">
+              {% csrf_token %}
+              <div class="control-group">
+                <div class="control-group">
+                  <p class="form__link" style="color: rgb(105, 113, 121);">Select your course from the dropdown below</p>                          
+                  <p class="help-block text-danger"></p>
+                  </div>
+                  <select class="form-control border-0 p-4" id="course" name="course" required="required" data-validation-required-message="Please select a course">
+                      <option value="" disabled selected>Course Name</option>  <!-- Default placeholder option -->
+                      {% for course in form.course.field.queryset %}
+                          <option value="{{ course.pk }}">{{ course.name }}</option>
+                      {% endfor %}
+                  </select>
+                  <p class="help-block text-danger"></p>
+              </div>
+              <button class="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold mt-2" type="submit">Enroll</button>
+          </form>
+          
+        </div>
+      </div>
+      </div>
+  </div>
+</div>
+<!-- Enroll End -->
+
 {% endblock %}
