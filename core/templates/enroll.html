@@ -32,13 +32,13 @@
               {% csrf_token %}
               <div class="control-group">
                 <div class="control-group">
-                  <p class="form__link" style="color: rgb(105, 113, 121);">Select your course from the dropdown below</p>                          
-                  <p class="help-block text-danger"></p>
+                  <p class="form__link" style="color: rgb(105, 113, 121);">Select your course from the dropdown  menu below</p>                          
+                  
                   </div>
                   <select class="form-control border-0 p-4" id="course" name="course" required="required" data-validation-required-message="Please select a course">
-                      <option value="" disabled selected>Course Name</option>  <!-- Default placeholder option -->
+                      <option value="" disabled selected >Course Name</option>  <!-- Default placeholder option -->
                       {% for course in form.course.field.queryset %}
-                          <option value="{{ course.pk }}">{{ course.name }}</option>
+                          <option value="{{ course.title }}">{{ course.name }}</option>
                       {% endfor %}
                   </select>
                   <p class="help-block text-danger"></p>
