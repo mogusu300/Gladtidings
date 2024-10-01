@@ -138,3 +138,8 @@ def delete_topic(request, topic_id):
         topic.delete()
         return redirect('list_topics', course_id=topic.course.id)
     return render(request, 'delete_topic.html', {'topic': topic})
+
+
+
+def index(request):
+    return render(request, 'index.html')

@@ -1,41 +1,45 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from django.utils.translation import gettext_lazy as _
+from .models import CustomUser, Institution, Course, Topic, Enrollment, Certificate
+from django.contrib.auth.admin import UserAdmin
 
-from .models import CustomUser, Institution
-
-
-class CustomUserAdmin(BaseUserAdmin):
-    # The fields to be used in displaying the User model.
-    # These override the definitions on the base UserAdmin
-    # that reference specific fields on auth.User.
-    fieldsets = (
-        (None, {'fields': ('username', 'password')}),
-        (_('Personal info'), {'fields': ('first_name', 'last_name', 'email')}),
-        (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser',
-                                        'groups', 'user_permissions')}),
-        (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
-        (_('Additional info'), {'fields': ('role',)}),  # Custom field for role
+# CustomUser Admin
+class CustomUserAdmin(UserAdmin):
+    # Add 'age' and 'role' to the fields displayed in the admin panel
+    fieldsets = UserAdmin.fieldsets + (
+        (None, {'fields': ('age', 'role')}),
     )
-    add_fieldsets = (
-        (None, {
-            'classes': ('wide',),
-            'fields': ('username', 'password1', 'password2'),
-        }),
-        (_('Personal info'), {'fields': ('first_name', 'last_name', 'email')}),
-        (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser',
-                                        'groups', 'user_permissions')}),
-        (_('Additional info'), {'fields': ('role',)}),  # Custom field for role
-    )
-    # Fields to display in the user list view
-    list_display = ('username', 'email', 'first_name',
-                    'last_name', 'is_staff', 'role')
-    # Fields to enable search functionality in the admin
-    search_fields = ('username', 'first_name', 'last_name', 'email', 'role')
-    # Default ordering of the user list
-    ordering = ('username',)
+    list_display = ('username', 'email', 'first_name', 'last_name', 'age', 'role', 'is_staff', 'is_active')
 
+# Institution Admin
+class InstitutionAdmin(admin.ModelAdmin):
+    list_display = ('name', 'description')
+    search_fields = ('name',)
 
-# Register the CustomUserAdmin
+# Course Admin
+class CourseAdmin(admin.ModelAdmin):
+    list_display = ('title', 'institution', 'public')
+    search_fields = ('title', 'institution__name')
+    list_filter = ('public', 'institution')
+
+# Topic Admin
+class TopicAdmin(admin.ModelAdmin):
+    list_display = ('title', 'course')
+    search_fields = ('title', 'course__title')
+
+# Enrollment Admin
+class EnrollmentAdmin(admin.ModelAdmin):
+    list_display = ('user', 'course')
+    search_fields = ('user__username', 'course__title')
+
+# Certificate Admin
+class CertificateAdmin(admin.ModelAdmin):
+    list_display = ('user', 'course', 'issued_at')
+    search_fields = ('user__username', 'course__title')
+
+# Register models with their respective Admin classes
 admin.site.register(CustomUser, CustomUserAdmin)
-admin.site.register(Institution)
+admin.site.register(Institution, InstitutionAdmin)
+admin.site.register(Course, CourseAdmin)
+admin.site.register(Topic, TopicAdmin)
+admin.site.register(Enrollment, EnrollmentAdmin)
+admin.site.register(Certificate, CertificateAdmin)
