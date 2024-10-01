@@ -43,6 +43,14 @@ Old code snippets
   </form>
 </div>
 
+enroll form
+<h2>Enroll in a Course</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Enroll</button>
+</form>
+
 --------------------------------------------------
 
 Pages to integrate:
