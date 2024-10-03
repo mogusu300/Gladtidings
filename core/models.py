@@ -19,16 +19,19 @@ class CustomUser(AbstractUser):
 
 class Institution(models.Model):
     name = models.CharField(max_length=255)
+    image = models.ImageField(upload_to='topics/', null=True, blank=True)
     description = models.TextField()
 
 class Course(models.Model):
     title = models.CharField(max_length=255)
+    image = models.ImageField(upload_to='topics/', null=True, blank=True)
     description = models.TextField()
     public = models.BooleanField(default=True)
     institution = models.ForeignKey(Institution, on_delete=models.CASCADE, null=True, blank=True)
 
 class Topic(models.Model):
     course = models.ForeignKey(Course, related_name='topics', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='topics/', null=True, blank=True)
     title = models.CharField(max_length=255)
     content = models.TextField()
 
