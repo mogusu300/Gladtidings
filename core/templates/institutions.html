@@ -1,0 +1,71 @@
+<!-- templates/institutions.html -->
+
+{% extends 'base.html' %}
+
+{% load compress %} {% load static %}
+
+{% block title %}Courses{% endblock %}
+{% block content %}
+
+<!-- *Header Start -->
+<div class="container-fluid page-header" style="margin-bottom: 90px">
+  <div class="container">
+    <div
+      class="d-flex flex-column justify-content-center"
+      style="min-height: 300px"
+    >
+      <h3 class="display-4 text-white text-uppercase">Institutions</h3>
+      <div class="d-inline-flex text-white">
+        <p class="m-0 text-uppercase">
+          <a class="text-white" href="{% url 'index' %}">Home</a>
+        </p>
+        <i class="fa fa-angle-double-right pt-1 px-3"></i>
+        <p class="m-0 text-uppercase">Institutions</p>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Header End -->
+
+
+
+<!-- Institution Start -->
+<div class="container-fluid py-5">
+    <div class="container pt-5 pb-3">
+    <div class="text-center mb-5">
+        <h5
+        class="text-primary text-uppercase mb-3"
+        style="letter-spacing: 5px"
+        >
+        Institutions
+        </h5>
+        <h1>Explore Courses From</h1>
+    </div>
+    <div class="row">
+        <!-- display for courses  -->
+        {% for institution in institutions %}
+        <div class="col-md-6 col-lg-3 mb-4 text-center">
+        <div class="institution-card rounded overflow-hidden">
+            <div class="institution-img position-relative">
+                {% if institution.image %}
+                <img class="img-fluid" src="{{ institution.image.url }}" alt="{{ institution.name }}" />
+                {% else %}
+                <img class="img-fluid" src="{% static 'img/default.jpg' %}" alt="No Image Available" />
+                {% endif %}
+
+            </div>
+            <div class="bg-secondary p-4">
+            <a href="" class="nav-item nav-link"
+                ><h5>{{ institution.name }}</h5></a
+            >
+            </div>
+        </div>
+        </div>
+        {% endfor %}
+    </div>
+    </div>
+</div>
+<!-- Institution End -->
+
+
+{% endblock %}

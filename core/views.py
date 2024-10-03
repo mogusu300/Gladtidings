@@ -1,9 +1,9 @@
 # views.py
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import authenticate, login, update_session_auth_hash
+from django.contrib.auth import authenticate, login, update_session_auth_hash, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import CustomUser, Course, Topic, Enrollment, Certificate
+from .models import CustomUser, Course, Institution, Topic, Enrollment, Certificate
 from .forms import CustomUserCreationForm, CourseForm, TopicForm, EnrollmentForm, CertificateForm
 
 def register(request):
@@ -28,9 +28,17 @@ def login_view(request):
             messages.error(request, 'Invalid username or password.')
     return render(request, 'login.html')
 
+def logout_view(request):
+    logout(request)  # Logs out the user
+    return redirect('login')  # Redirect to the login page
+
 def list_courses(request):
     courses = Course.objects.filter(public=True)
     return render(request, 'courses.html', {'courses': courses})
+
+def list_institutions(request):
+    institutions = Institution.objects.all()
+    return render(request, 'institutions.html', {'institutions': institutions})
 
 @login_required
 def my_courses(request):
