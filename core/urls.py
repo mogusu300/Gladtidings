@@ -16,4 +16,5 @@ urlpatterns = [
     path('courses/<int:course_id>/topics/create/', views.create_topic, name='create_topic'),
     path('topics/<int:topic_id>/update/', views.update_topic, name='update_topic'),
     path('topics/<int:topic_id>/delete/', views.delete_topic, name='delete_topic'),
+    path('', views.index, name='index'),
 ]
