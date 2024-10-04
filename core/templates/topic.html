@@ -1,8 +1,31 @@
-<!-- templates/topic.html -->
-{% load compress %} {% load static %}
+<!-- *Topic Content Page Start -->
 {% extends 'base.html' %}
-{% block title %}Topic Details{% endblock %}
+
+{% load static %}
+
 {% block content %}
-<h2>{{ topic.title }}</h2>
-<p>{{ topic.content }}</p>
-{% endblock %}
+<div class="container">
+    <div>
+      <!-- Display Topic Title -->
+      <h1>{{ topic.title }}</h1>
+  
+      <!-- Display Topic Image (if available) -->
+      {% if topic.image %}
+      <div>
+        <img src="{{ topic.image.url }}" alt="{{ topic.title }}" />
+      </div>
+      {% endif %}
+  
+      <!-- Display Full Topic Content -->
+      <div>
+        <p>{{ topic.content|linebreaks }}</p>
+      </div>
+  
+      <!-- Back Button -->
+      <div>
+        <a href="{% url 'list_topics' topic.course.id %}">Back to Topics</a>
+      </div>
+    </div>
+  </div>
+  
+  {% endblock %}

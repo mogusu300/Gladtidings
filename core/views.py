@@ -88,8 +88,14 @@ def create_course(request):
 
 @login_required
 def list_topics(request, course_id):
-    topics = Topic.objects.filter(course_id=course_id)
-    return render(request, 'topics.html', {'topics': topics})
+    course = get_object_or_404(Course, id=course_id)
+    topics = Topic.objects.filter(course=course)
+
+    for topic in topics:
+        print(f"Topic: {topic.title}, ID: {topic.id}")
+
+    return render(request, 'list_topics.html', {'course': course, 'topics': topics})
+
 
 @login_required
 def get_topic(request, topic_id):

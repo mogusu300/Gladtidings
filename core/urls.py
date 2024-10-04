@@ -13,9 +13,10 @@ urlpatterns = [
     path('create-course/', views.create_course, name='create_course'),
     path('courses/<int:course_id>/topics/', views.list_topics, name='list_topics'),
     path('topics/<int:topic_id>/', views.get_topic, name='get_topic'),
-     path('', views.index, name='index'),
+    path('', views.index, name='index'),
     path('courses/<int:course_id>/topics/create/', views.create_topic, name='create_topic'),
     path('topics/<int:topic_id>/update/', views.update_topic, name='update_topic'),
     path('topics/<int:topic_id>/delete/', views.delete_topic, name='delete_topic'),
-    path('index/',views.index,name='index')
+    path('index/',views.index,name='index'),
+    path('course/<int:course_id>/topics/', views.list_topics, name='list_topics'),
 ]

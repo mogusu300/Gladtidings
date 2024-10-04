@@ -1,0 +1,15 @@
+<h1>Topics for {{ course.title }}</h1>
+
+<ul>
+    {% for topic in topics %}
+        <li>
+            {% if topic.id %}
+                <a href="{% url 'get_topic' topic.id %}">{{ topic.title }}</a>
+            {% else %}
+                <span>{{ topic.title }} (No valid link)</span>
+            {% endif %}
+        </li>
+    {% empty %}
+        <li>No topics available for this course.</li>
+    {% endfor %}
+</ul>
