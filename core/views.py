@@ -40,6 +40,7 @@ def list_institutions(request):
     institutions = Institution.objects.all()
     return render(request, 'institutions.html', {'institutions': institutions})
 
+
 @login_required
 def my_courses(request):
     enrollments = Enrollment.objects.filter(user=request.user)
@@ -52,12 +53,16 @@ def enroll(request):
         form = EnrollmentForm(request.POST)
         if form.is_valid():
             enrollment = form.save(commit=False)
-            enrollment.user = request.user
-            enrollment.save()
-            return redirect('my_courses')
+            enrollment.user = request.user  # Assign the logged-in user
+            enrollment.save()  # Save the enrollment
+            return redirect('my_courses')  # Redirect to the 'my_courses' page
+        else:
+            print(form.errors)  # Print form errors for debugging
     else:
         form = EnrollmentForm()
+
     return render(request, 'enroll.html', {'form': form})
+
 
 @login_required
 def my_certificates(request):

@@ -1,7 +1,7 @@
 from django.db import models
-from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
-from django.db import models
+from django.conf import settings
+
 
 class CustomUser(AbstractUser):
     username = models.CharField(max_length=150, unique=True)
@@ -32,6 +32,9 @@ class Course(models.Model):
     public = models.BooleanField(default=True)
     institution = models.ForeignKey(Institution, on_delete=models.CASCADE, null=True, blank=True)
 
+    def __str__(self):
+        return self.title
+
 class Topic(models.Model):
     course = models.ForeignKey(Course, related_name='topics', on_delete=models.CASCADE)
     image = models.ImageField(upload_to='topics/', null=True, blank=True)
@@ -39,11 +42,15 @@ class Topic(models.Model):
     content = models.TextField()
 
 class Enrollment(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)  
+    enrollment_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} enrolled in {self.course.title}"
 
 class Certificate(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     issued_at = models.DateTimeField(auto_now_add=True)
 

@@ -10,6 +10,9 @@ class CustomUserAdmin(UserAdmin):
     )
     list_display = ('username', 'email', 'first_name', 'last_name', 'age', 'role', 'is_staff', 'is_active')
 
+    # Make 'date_joined' and 'last_login' read-only to avoid editing errors
+    readonly_fields = ('date_joined', 'last_login')
+
 # Institution Admin
 class InstitutionAdmin(admin.ModelAdmin):
     list_display = ('name', 'description')
