@@ -1,9 +1,9 @@
 # views.py
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import authenticate, login, update_session_auth_hash, logout
+from django.contrib.auth import authenticate, login, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import CustomUser, Course, Institution, Topic, Enrollment, Certificate
+from .models import CustomUser, Course, Topic, Enrollment, Certificate
 from .forms import CustomUserCreationForm, CourseForm, TopicForm, EnrollmentForm, CertificateForm
 
 def register(request):
@@ -28,18 +28,9 @@ def login_view(request):
             messages.error(request, 'Invalid username or password.')
     return render(request, 'login.html')
 
-def logout_view(request):
-    logout(request)  # Logs out the user
-    return redirect('login')  # Redirect to the login page
-
 def list_courses(request):
     courses = Course.objects.filter(public=True)
     return render(request, 'courses.html', {'courses': courses})
-
-def list_institutions(request):
-    institutions = Institution.objects.all()
-    return render(request, 'institutions.html', {'institutions': institutions})
-
 
 @login_required
 def my_courses(request):
@@ -53,16 +44,12 @@ def enroll(request):
         form = EnrollmentForm(request.POST)
         if form.is_valid():
             enrollment = form.save(commit=False)
-            enrollment.user = request.user  # Assign the logged-in user
-            enrollment.save()  # Save the enrollment
-            return redirect('my_courses')  # Redirect to the 'my_courses' page
-        else:
-            print(form.errors)  # Print form errors for debugging
+            enrollment.user = request.user
+            enrollment.save()
+            return redirect('my_courses')
     else:
         form = EnrollmentForm()
-
     return render(request, 'enroll.html', {'form': form})
-
 
 @login_required
 def my_certificates(request):
@@ -101,8 +88,14 @@ def create_course(request):
 
 @login_required
 def list_topics(request, course_id):
-    topics = Topic.objects.filter(course_id=course_id)
-    return render(request, 'topics.html', {'topics': topics})
+    course = get_object_or_404(Course, id=course_id)
+    topics = Topic.objects.filter(course=course)
+
+    for topic in topics:
+        print(f"Topic: {topic.title}, ID: {topic.id}")
+
+    return render(request, 'list_topics.html', {'course': course, 'topics': topics})
+
 
 @login_required
 def get_topic(request, topic_id):
@@ -155,8 +148,4 @@ def delete_topic(request, topic_id):
 
 
 def index(request):
-    return render(request, 'index.html')
-
-
-def index (request):
     return render(request, 'index.html')

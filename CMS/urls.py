@@ -19,15 +19,10 @@ Including another URLconf
 # CMS/urls.py (or your project's main urls.py)
 from django.contrib import admin
 from django.urls import path, include
-from django.conf.urls.static import static
-from django.conf import settings
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('core.urls')),  # Include the URLs from the core app
 ]
-
-if settings.DEBUG:  # Only serve media files in development mode
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
